@@ -1,0 +1,55 @@
+import express, { response } from 'express';
+
+const app = express();
+
+app.use(express.json());
+
+const users = [
+    'Marcelo',
+    'Josnel',
+    'Cleber',
+    'Joel'
+];
+// Rota: endereço completo da requisição
+// Recurso: qual entidade estamos acessando do sistema ("/users")
+
+// GET: buscar uma ou mais inforções do backend
+// POST: criar uma nova informação no backend
+// PUT: atualizar uma informação existente no backend
+// DELETE: remover uma informação do backend
+
+// post: http://localhost:3333/users = criar users
+// get: http://localhost:3333/users = listar users
+
+// Request Param: Parametros que vem na propria rota que identificam um  recurso
+// Query Param: Parametros qye vem na propria rota geralmente opcionais para filtros, paginação
+// Request Body: Parametros para criação/atualização de informações
+
+app.get('/users', (req, res) => {
+    const search = String(req.query.search);
+
+    const filteredUsers = search ? users.filter(user => user.includes(search)): users;
+
+    return res.json(filteredUsers);
+});
+
+app.get('/users/:id', (req, res) => {
+    const id = Number(req.params.id);
+    
+    const user = users[id];
+
+    return res.json(user);
+})
+
+app.post('/users', (req, res) => {
+    const data = req.body;
+
+    const user = {
+        name: data.name,
+        email: data.email
+    };
+
+    return res.json(user)
+});
+
+app.listen(3333);
